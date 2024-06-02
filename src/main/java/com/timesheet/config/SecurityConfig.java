@@ -58,7 +58,6 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthFilter jwtAuthFilter) throws Exception {
-
         http.cors(new Customizer<CorsConfigurer<HttpSecurity>>() {
             @Override
             public void customize(CorsConfigurer<HttpSecurity> httpSecurityCorsConfigurer) {
@@ -66,7 +65,7 @@ public class SecurityConfig {
                     @Override
                     public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                         CorsConfiguration config = new CorsConfiguration();
-                        config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept", "X-Requested-With"));
+                        config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept", "X-Requested-With", "remember-me", "password", "password", "email"));                        config.setExposedHeaders(List.of("Authorization"));
                         config.setExposedHeaders(List.of("Authorization"));
                         config.setAllowedMethods(Arrays.asList("POST", "GET", "PUT", "OPTIONS", "DELETE"));
                         config.setAllowCredentials(true);
@@ -77,7 +76,6 @@ public class SecurityConfig {
                 });
             }
         });
-
         http
                 .cors(Customizer.withDefaults())
                 .csrf(csrf -> csrf.disable())

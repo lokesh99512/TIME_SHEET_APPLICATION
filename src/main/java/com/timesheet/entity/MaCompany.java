@@ -22,13 +22,15 @@ public class MaCompany extends BaseEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String location;
-    private String description;
+    private String address;
     private String logo;
     private String phoneNumber;
     private String email;
     private String website;
-
+    private String country;
+    private String city;
+    private String zipcode;
+    private String state;
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private Status status = Status.ACTIVE;

@@ -39,15 +39,4 @@ public class SubTask extends BaseEntity implements Serializable {
     @Fetch(FetchMode.JOIN)
     @JoinColumn(name = "task_id", nullable = false, referencedColumnName = "id")
     private Task task;
-
-    @OneToOne
-    @Fetch(FetchMode.JOIN)
-    @JoinColumn(name = "ma_company_id", nullable = true, referencedColumnName = "id")
-    private MaCompany maCompany;
-
-    @OneToOne
-    @Fetch(FetchMode.JOIN)
-    @JoinColumn(name = "ma_category_id", nullable = true, referencedColumnName = "id")
-    private MaCategory maCategory;
-
 }

@@ -19,6 +19,5 @@ public class MaUserDetailsService implements UserDetailsService {
         Optional<MaUser> maUser= maUserRepository.findByEmail(username);
        return maUser.map(MaUserDetails::new).
                 orElseThrow(()-> new UsernameNotFoundException("User not found"+ username));
-
     }
 }

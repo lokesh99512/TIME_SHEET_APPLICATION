@@ -43,12 +43,11 @@ public class Task extends BaseEntity implements Serializable {
 
     @Fetch(FetchMode.SELECT)
     @OneToMany(mappedBy = "task", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<SubTask> subTasks;
+    private List<TaskUser> taskUsers;
 
-    @OneToOne
-    @Fetch(FetchMode.JOIN)
-    @JoinColumn(name = "ma_company_id", nullable = true, referencedColumnName = "id")
-    private MaCompany maCompany;
+    @Fetch(FetchMode.SELECT)
+    @OneToMany(mappedBy = "task", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<SubTask> subTasks;
 
     @OneToOne
     @Fetch(FetchMode.JOIN)

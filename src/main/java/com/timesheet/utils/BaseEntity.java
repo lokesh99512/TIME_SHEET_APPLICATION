@@ -1,6 +1,8 @@
 package com.timesheet.utils;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.timesheet.service.MaUserService;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
@@ -24,19 +26,23 @@ import java.time.LocalDateTime;
 public class BaseEntity implements Serializable {
 
     @Column(name = "created_date", nullable = true, updatable = false)
+    @JsonIgnore
     @CreatedDate
     private LocalDateTime createdDate;
 
     @Column(name = "modified_date", nullable = true)
+    @JsonIgnore
     @LastModifiedDate
     private LocalDateTime modifiedDate;
 
     @Column(name = "modified_by", nullable = true)
+    @JsonIgnore
     @LastModifiedBy
-    private Long modifiedBy;
+    private Long modifiedBy= MaUserService.modifiedBy;
 
     @Column(name = "created_by", nullable = true, updatable = false)
+    @JsonIgnore
     @CreatedBy
-    private Long createdBy;
+    private Long createdBy=MaUserService.createdBy;
 
 }

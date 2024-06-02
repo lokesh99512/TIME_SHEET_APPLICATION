@@ -19,6 +19,10 @@ import java.io.Serializable;
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Audited
+@Table(name="project_user",
+        indexes = {
+                @Index(name="project_user_index", columnList = "ma_user_id")
+        })
 public class ProjectUser implements Serializable {
 
     @Id
@@ -33,6 +37,7 @@ public class ProjectUser implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @Fetch(FetchMode.JOIN)
+    @JsonIgnore
     @JoinColumn(name = "project_id", nullable = false, referencedColumnName = "id")
     private Project project;
 

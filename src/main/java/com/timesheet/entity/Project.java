@@ -1,6 +1,8 @@
 package com.timesheet.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.timesheet.utils.BaseEntity;
+import com.timesheet.utils.BillableType;
 import com.timesheet.utils.Status;
 import jakarta.persistence.*;
 import lombok.*;
@@ -38,15 +40,18 @@ public class Project extends BaseEntity implements Serializable {
     private List<ProjectUser> projectUsers;
 
     @Fetch(FetchMode.SELECT)
-    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Task> tasks;
 
     @OneToOne
     @Fetch(FetchMode.JOIN)
     @JoinColumn(name = "ma_company_id", nullable = true, referencedColumnName = "id")
+    @JsonIgnore
     private MaCompany maCompany;
 
-    private Boolean isBillable;
+    @Column(name = "billable_Type")
+    @Enumerated(EnumType.STRING)
+    private BillableType billableType = BillableType.BILLABLE;
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)

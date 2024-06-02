@@ -7,6 +7,10 @@ import com.timesheet.entity.MaUser;
 import com.timesheet.service.MaUserService;
 import com.timesheet.utils.AppException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -36,21 +40,20 @@ public class MaUserController {
 
 
     @RequestMapping(path = "/", method = RequestMethod.GET)
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<List<MaUser>> getMaUser(){
-       Object demo =SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return new ResponseEntity<List<MaUser>>(maUserService.getAllUser(), HttpStatus.OK);
+    public ResponseEntity<Page<MaUser>> getMaUser( @PageableDefault(size = Integer.MAX_VALUE, page = 0, direction = Sort.Direction.DESC, sort = {"id"}) Pageable pageable){
+        MaUserDetails userDetails = (MaUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return new ResponseEntity<Page<MaUser>>(maUserService.getAllUser(userDetails, pageable ), HttpStatus.OK);
     }
 
     @RequestMapping(path = "/{id}", method = RequestMethod.GET)
-    @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<MaUser> getMaUserById(@PathVariable Long id){
         return new ResponseEntity<MaUser>(maUserService.getById(id), HttpStatus.OK);
     }
 
     @RequestMapping(path="/sign-up" , method = RequestMethod.POST)
     public ResponseEntity<MaUser> saveUser(@RequestBody MaUser maUser){
-        return new ResponseEntity<MaUser>(maUserService.saveUser(maUser), HttpStatus.OK);
+        MaUserDetails userDetails = (MaUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return new ResponseEntity<MaUser>(maUserService.saveUser(maUser,userDetails), HttpStatus.OK);
     }
 
     @RequestMapping(path="/sign-in" ,produces = {"application/json"}, method = RequestMethod.POST)
@@ -65,6 +68,7 @@ public class MaUserController {
             loggedInUser.setJwtToken(jwtService.generateToken(email));
             loggedInUser.setName(userDetails.getName());
             loggedInUser.setEmail(userDetails.getEmail());
+            loggedInUser.setMaCompany(userDetails.getMaCompany());
             loggedInUser.setRoles(userDetails.getAuthorities().stream()
                     .map(GrantedAuthority::getAuthority)
                     .collect(Collectors.toList()));
